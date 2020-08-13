@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dj0nny/svelte-express-boilerplate.git"
+    "url": "git+https://github.com/rande100/progressiongame2.git"
   },
-  "author": "dj0nny",
+  "author": "rande100",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/dj0nny/svelte-express-boilerplate/issues"
+    "url": "https://github.com/rande100/progressiongame2/issues"
   },
-  "homepage": "https://github.com/dj0nny/svelte-express-boilerplate#readme",
+  "homepage": "https://github.com/rande100/progressiongame2#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
     "concurrently": "^5.2.0",
