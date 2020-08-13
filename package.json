@@ -1,11 +1,10 @@
 {
-  "name": "svelte-express-boilerplate",
+  "name": "progressiongame2",
   "version": "1.0.0",
-  "description": "Boilerplate for developing full stack apps with Express and Svelte.js",
+  "description": "",
   "main": "src/app.js",
   "scripts": {
     "client-install": "cd client && npm install",
-    "start": "node src/app.js",
     "serve:server": "nodemon src/app.js",
     "serve:client": "cd client && npm run dev",
     "dev": "concurrently \"npm run serve:server\" \"npm run serve:client\"",
@@ -29,5 +28,6 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
-  }
+  },
+  "keywords": []
 }

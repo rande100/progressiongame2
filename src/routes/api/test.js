@@ -25,7 +25,6 @@ const testData = [
 ];
 
 router.get("/", (req, res) => {
-  console.log("returning api test");
   res.status(200).json(testData);
 });
 

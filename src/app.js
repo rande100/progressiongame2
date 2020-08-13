@@ -16,11 +16,21 @@ if (process.env.NODE_ENV === "production") {
 
 const test = require("./routes/api/test");
 
+let player = {
+  name: "John Doe",
+  level: 10,
+  health: 100
+};
+
 app.use(bodyParser.json());
 
 app.use(cors());
 
 app.use("/api/test", test);
+
+app.get("/api/player", (req, res, next) => {
+  res.send(player);
+});
 
 app.listen(port, () => {
   console.log(`Server is up at port ${port}`);
