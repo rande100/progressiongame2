@@ -1,8 +1,14 @@
 {
   "version": 3,
   "file": "bundle.css",
-  "sources": [],
-  "sourcesContent": [],
+  "sources": [
+    "../Mobs.svelte",
+    "../Party.svelte"
+  ],
+  "sourcesContent": [
+    "<script>\r\n  export let mobs = [];\r\n</script>\r\n\r\n<style>\r\n  .mobModel {\r\n    width: 64px;\r\n    height: 64px;\r\n    background-color: #dddddd;\r\n  }\r\n</style>\r\n\r\n<h4>Mobs</h4>\r\n<div class=\"mobs\">\r\n  {#each mobs as mob}\r\n  <div class=\"mob\">\r\n    <div><div class=\"mobModel\" id=\"mobModel\"></div></div>\r\n    <div><meter value=\"{mob.health / mob.maxHealth}\"></meter></div>\r\n    <div><strong>{mob.name}</strong> (Level {mob.level})</div>\r\n    <div>Health: {mob.health}/{mob.maxHealth}</div>\r\n  </div>\r\n  {/each}\r\n</div>\r\n",
+    "<script>\r\n  export let party;\r\n</script>\r\n\r\n<style>\r\n  .partyMemberModel {\r\n    width: 64px;\r\n    height: 64px;\r\n    background-color: #dddddd;\r\n  }\r\n</style>\r\n\r\n<h4>Party</h4>\r\n<div class=\"party\">\r\n  {#each party as partyMember}\r\n  <div class=\"partyMember\">\r\n    <div><div class=\"partyMemberModel\" id=\"partyMemberModel{partyMember.id}\"></div></div>\r\n    <div><meter value=\"{partyMember.health / partyMember.maxHealth}\"></meter></div>\r\n    <div><strong>{partyMember.name}</strong> (Level {partyMember.level})</div>\r\n    <div>Health: {partyMember.health}/{partyMember.maxHealth}</div>\r\n  </div>\r\n  {/each}\r\n</div>"
+  ],
   "names": [],
-  "mappings": ""
+  "mappings": "AAKE,SAAS,eAAC,CAAC,AACT,KAAK,CAAE,IAAI,CACX,MAAM,CAAE,IAAI,CACZ,gBAAgB,CAAE,OAAO,AAC3B,CAAC;ACJD,iBAAiB,cAAC,CAAC,AACjB,KAAK,CAAE,IAAI,CACX,MAAM,CAAE,IAAI,CACZ,gBAAgB,CAAE,OAAO,AAC3B,CAAC"
 }

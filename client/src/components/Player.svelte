@@ -1,6 +1,10 @@
+<h4>Player</h4>
+
 <script>
   export let player;
 </script>
-<p>Name: {player.name}</p>
-<p>Level: {player.level}</p>
-<p>Health: {player.health}</p>
+
+<div>{JSON.stringify(player)}</div>
+<div>Name: {player.name}</div>
+<div>Level: {player.level}</div>
+<div>Health: {player.health}</div>
