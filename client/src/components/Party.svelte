@@ -3,7 +3,16 @@
 </script>
 
 <style>
-  .partyMemberModel {
+  .party {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .party-member {
+    margin-right: 1em;
+    margin-bottom: 1em;
+  }
+  .party-member-model {
     width: 64px;
     height: 64px;
     background-color: #dddddd;
@@ -12,12 +21,13 @@
 
 <h4>Party</h4>
 <div class="party">
-  {#each party as partyMember}
-  <div class="partyMember">
-    <div><div class="partyMemberModel" id="partyMemberModel{partyMember.id}"></div></div>
+  {#each Object.values(party) as partyMember}
+  <div class="party-member">
+    <div><div class="party-member-model" id="party-member-model-{partyMember.id}"></div></div>
     <div><meter value="{partyMember.health / partyMember.maxHealth}"></meter></div>
-    <div><strong>{partyMember.name}</strong> (Level {partyMember.level})</div>
-    <div>Health: {partyMember.health}/{partyMember.maxHealth}</div>
+    <div><strong>{partyMember.name}</strong></div>
+    <div>HP {partyMember.health}/{partyMember.maxHealth}</div>
+    <div>Level {partyMember.level}</div>
   </div>
   {/each}
 </div>
