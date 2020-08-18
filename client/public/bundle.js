@@ -10489,11 +10489,55 @@ var app = (function () {
 
     function get_each_context$2(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[1] = list[i];
+    	child_ctx[3] = list[i];
     	return child_ctx;
     }
 
-    // (24:2) {#each Object.values(party) as partyMember}
+    // (37:4) {#if partyMember.health === 0}
+    function create_if_block$3(ctx) {
+    	let div;
+    	let button;
+    	let mounted;
+    	let dispose;
+
+    	const block = {
+    		c: function create() {
+    			div = element("div");
+    			button = element("button");
+    			button.textContent = "Resurrect";
+    			attr_dev(button, "type", "button");
+    			add_location(button, file$3, 37, 11, 924);
+    			add_location(div, file$3, 37, 6, 919);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+    			append_dev(div, button);
+
+    			if (!mounted) {
+    				dispose = listen_dev(button, "click", /*resurrect*/ ctx[1], false, false, false);
+    				mounted = true;
+    			}
+    		},
+    		p: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block$3.name,
+    		type: "if",
+    		source: "(37:4) {#if partyMember.health === 0}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (29:2) {#each Object.values(party) as partyMember}
     function create_each_block$2(ctx) {
     	let div6;
     	let div1;
@@ -10506,22 +10550,24 @@ var app = (function () {
     	let t1;
     	let div3;
     	let strong;
-    	let t2_value = /*partyMember*/ ctx[1].name + "";
+    	let t2_value = /*partyMember*/ ctx[3].name + "";
     	let t2;
     	let t3;
     	let div4;
     	let t4;
-    	let t5_value = /*partyMember*/ ctx[1].health + "";
+    	let t5_value = /*partyMember*/ ctx[3].health + "";
     	let t5;
     	let t6;
-    	let t7_value = /*partyMember*/ ctx[1].maxHealth + "";
+    	let t7_value = /*partyMember*/ ctx[3].maxHealth + "";
     	let t7;
     	let t8;
     	let div5;
     	let t9;
-    	let t10_value = /*partyMember*/ ctx[1].level + "";
+    	let t10_value = /*partyMember*/ ctx[3].level + "";
     	let t10;
     	let t11;
+    	let t12;
+    	let if_block = /*partyMember*/ ctx[3].health === 0 && create_if_block$3(ctx);
 
     	const block = {
     		c: function create() {
@@ -10546,19 +10592,21 @@ var app = (function () {
     			t9 = text("Level ");
     			t10 = text(t10_value);
     			t11 = space();
+    			if (if_block) if_block.c();
+    			t12 = space();
     			attr_dev(div0, "class", "party-member-model svelte-edptwe");
-    			attr_dev(div0, "id", div0_id_value = "party-member-model-" + /*partyMember*/ ctx[1].id);
-    			add_location(div0, file$3, 25, 9, 445);
-    			add_location(div1, file$3, 25, 4, 440);
-    			meter.value = meter_value_value = /*partyMember*/ ctx[1].health / /*partyMember*/ ctx[1].maxHealth;
-    			add_location(meter, file$3, 26, 9, 541);
-    			add_location(div2, file$3, 26, 4, 536);
-    			add_location(strong, file$3, 27, 9, 626);
-    			add_location(div3, file$3, 27, 4, 621);
-    			add_location(div4, file$3, 28, 4, 673);
-    			add_location(div5, file$3, 29, 4, 737);
+    			attr_dev(div0, "id", div0_id_value = "party-member-model-" + /*partyMember*/ ctx[3].id);
+    			add_location(div0, file$3, 30, 9, 545);
+    			add_location(div1, file$3, 30, 4, 540);
+    			meter.value = meter_value_value = /*partyMember*/ ctx[3].health / /*partyMember*/ ctx[3].maxHealth;
+    			add_location(meter, file$3, 31, 9, 641);
+    			add_location(div2, file$3, 31, 4, 636);
+    			add_location(strong, file$3, 32, 9, 726);
+    			add_location(div3, file$3, 32, 4, 721);
+    			add_location(div4, file$3, 33, 4, 773);
+    			add_location(div5, file$3, 34, 4, 837);
     			attr_dev(div6, "class", "party-member svelte-edptwe");
-    			add_location(div6, file$3, 24, 2, 408);
+    			add_location(div6, file$3, 29, 2, 508);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div6, anchor);
@@ -10582,23 +10630,39 @@ var app = (function () {
     			append_dev(div5, t9);
     			append_dev(div5, t10);
     			append_dev(div6, t11);
+    			if (if_block) if_block.m(div6, null);
+    			append_dev(div6, t12);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*party*/ 1 && div0_id_value !== (div0_id_value = "party-member-model-" + /*partyMember*/ ctx[1].id)) {
+    			if (dirty & /*party*/ 1 && div0_id_value !== (div0_id_value = "party-member-model-" + /*partyMember*/ ctx[3].id)) {
     				attr_dev(div0, "id", div0_id_value);
     			}
 
-    			if (dirty & /*party*/ 1 && meter_value_value !== (meter_value_value = /*partyMember*/ ctx[1].health / /*partyMember*/ ctx[1].maxHealth)) {
+    			if (dirty & /*party*/ 1 && meter_value_value !== (meter_value_value = /*partyMember*/ ctx[3].health / /*partyMember*/ ctx[3].maxHealth)) {
     				prop_dev(meter, "value", meter_value_value);
     			}
 
-    			if (dirty & /*party*/ 1 && t2_value !== (t2_value = /*partyMember*/ ctx[1].name + "")) set_data_dev(t2, t2_value);
-    			if (dirty & /*party*/ 1 && t5_value !== (t5_value = /*partyMember*/ ctx[1].health + "")) set_data_dev(t5, t5_value);
-    			if (dirty & /*party*/ 1 && t7_value !== (t7_value = /*partyMember*/ ctx[1].maxHealth + "")) set_data_dev(t7, t7_value);
-    			if (dirty & /*party*/ 1 && t10_value !== (t10_value = /*partyMember*/ ctx[1].level + "")) set_data_dev(t10, t10_value);
+    			if (dirty & /*party*/ 1 && t2_value !== (t2_value = /*partyMember*/ ctx[3].name + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*party*/ 1 && t5_value !== (t5_value = /*partyMember*/ ctx[3].health + "")) set_data_dev(t5, t5_value);
+    			if (dirty & /*party*/ 1 && t7_value !== (t7_value = /*partyMember*/ ctx[3].maxHealth + "")) set_data_dev(t7, t7_value);
+    			if (dirty & /*party*/ 1 && t10_value !== (t10_value = /*partyMember*/ ctx[3].level + "")) set_data_dev(t10, t10_value);
+
+    			if (/*partyMember*/ ctx[3].health === 0) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+    				} else {
+    					if_block = create_if_block$3(ctx);
+    					if_block.c();
+    					if_block.m(div6, t12);
+    				}
+    			} else if (if_block) {
+    				if_block.d(1);
+    				if_block = null;
+    			}
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div6);
+    			if (if_block) if_block.d();
     		}
     	};
 
@@ -10606,7 +10670,7 @@ var app = (function () {
     		block,
     		id: create_each_block$2.name,
     		type: "each",
-    		source: "(24:2) {#each Object.values(party) as partyMember}",
+    		source: "(29:2) {#each Object.values(party) as partyMember}",
     		ctx
     	});
 
@@ -10636,9 +10700,9 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			add_location(h4, file$3, 21, 0, 322);
+    			add_location(h4, file$3, 26, 0, 422);
     			attr_dev(div, "class", "party svelte-edptwe");
-    			add_location(div, file$3, 22, 0, 338);
+    			add_location(div, file$3, 27, 0, 438);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -10653,7 +10717,7 @@ var app = (function () {
     			}
     		},
     		p: function update(ctx, [dirty]) {
-    			if (dirty & /*Object, party*/ 1) {
+    			if (dirty & /*resurrect, Object, party*/ 3) {
     				each_value = Object.values(/*party*/ ctx[0]);
     				validate_each_argument(each_value);
     				let i;
@@ -10700,7 +10764,13 @@ var app = (function () {
 
     function instance$3($$self, $$props, $$invalidate) {
     	let { party } = $$props;
-    	const writable_props = ["party"];
+    	let { socket } = $$props;
+
+    	const resurrect = event => {
+    		socket.emit("player resurrect");
+    	};
+
+    	const writable_props = ["party", "socket"];
 
     	Object_1.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<Party> was created with unknown prop '${key}'`);
@@ -10711,25 +10781,27 @@ var app = (function () {
 
     	$$self.$$set = $$props => {
     		if ("party" in $$props) $$invalidate(0, party = $$props.party);
+    		if ("socket" in $$props) $$invalidate(2, socket = $$props.socket);
     	};
 
-    	$$self.$capture_state = () => ({ party });
+    	$$self.$capture_state = () => ({ party, socket, resurrect });
 
     	$$self.$inject_state = $$props => {
     		if ("party" in $$props) $$invalidate(0, party = $$props.party);
+    		if ("socket" in $$props) $$invalidate(2, socket = $$props.socket);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [party];
+    	return [party, resurrect, socket];
     }
 
     class Party extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$3, create_fragment$3, safe_not_equal, { party: 0 });
+    		init(this, options, instance$3, create_fragment$3, safe_not_equal, { party: 0, socket: 2 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -10744,6 +10816,10 @@ var app = (function () {
     		if (/*party*/ ctx[0] === undefined && !("party" in props)) {
     			console.warn("<Party> was created without expected prop 'party'");
     		}
+
+    		if (/*socket*/ ctx[2] === undefined && !("socket" in props)) {
+    			console.warn("<Party> was created without expected prop 'socket'");
+    		}
     	}
 
     	get party() {
@@ -10751,6 +10827,14 @@ var app = (function () {
     	}
 
     	set party(value) {
+    		throw new Error("<Party>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get socket() {
+    		throw new Error("<Party>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set socket(value) {
     		throw new Error("<Party>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
@@ -11136,7 +11220,7 @@ var app = (function () {
     }
 
     // (39:2) {#if noMobs}
-    function create_if_block$3(ctx) {
+    function create_if_block$4(ctx) {
     	let button;
     	let mounted;
     	let dispose;
@@ -11167,7 +11251,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block$3.name,
+    		id: create_if_block$4.name,
     		type: "if",
     		source: "(39:2) {#if noMobs}",
     		ctx
@@ -11195,7 +11279,7 @@ var app = (function () {
     	}
 
     	function select_block_type(ctx, dirty) {
-    		if (/*noMobs*/ ctx[2]) return create_if_block$3;
+    		if (/*noMobs*/ ctx[2]) return create_if_block$4;
     		return create_else_block$3;
     	}
 
@@ -11222,7 +11306,9 @@ var app = (function () {
     			attr_dev(input, "type", "checkbox");
     			attr_dev(input, "name", "autospawn");
     			input.checked = /*autospawn*/ ctx[1];
-    			add_location(input, file$5, 43, 9, 1007);
+    			add_location(input, file$5, 43, 52, 1050);
+    			set_style(label, "display", "inline");
+    			set_style(label, "margin-left", "1em");
     			add_location(label, file$5, 43, 2, 1000);
     			add_location(div, file$5, 32, 0, 624);
     		},
@@ -11659,8 +11745,8 @@ var app = (function () {
     const { console: console_1 } = globals;
     const file$7 = "src/App.svelte";
 
-    // (73:4) {#if mobs && mobs["a"] && mobs["a"].health > 0 && player && player.health > 0}
-    function create_if_block$4(ctx) {
+    // (67:4) {#if mobs && mobs["a"] && mobs["a"].health > 0 && player && player.health > 0}
+    function create_if_block$5(ctx) {
     	let button;
     	let mounted;
     	let dispose;
@@ -11671,7 +11757,7 @@ var app = (function () {
     			button.textContent = "Attack";
     			attr_dev(button, "type", "button");
     			attr_dev(button, "name", "attack");
-    			add_location(button, file$7, 73, 6, 2559);
+    			add_location(button, file$7, 67, 6, 2350);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -11691,9 +11777,9 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block$4.name,
+    		id: create_if_block$5.name,
     		type: "if",
-    		source: "(73:4) {#if mobs && mobs[\\\"a\\\"] && mobs[\\\"a\\\"].health > 0 && player && player.health > 0}",
+    		source: "(67:4) {#if mobs && mobs[\\\"a\\\"] && mobs[\\\"a\\\"].health > 0 && player && player.health > 0}",
     		ctx
     	});
 
@@ -11739,10 +11825,13 @@ var app = (function () {
     			$$inline: true
     		});
 
-    	let if_block = /*mobs*/ ctx[2] && /*mobs*/ ctx[2]["a"] && /*mobs*/ ctx[2]["a"].health > 0 && /*player*/ ctx[0] && /*player*/ ctx[0].health > 0 && create_if_block$4(ctx);
+    	let if_block = /*mobs*/ ctx[2] && /*mobs*/ ctx[2]["a"] && /*mobs*/ ctx[2]["a"].health > 0 && /*player*/ ctx[0] && /*player*/ ctx[0].health > 0 && create_if_block$5(ctx);
 
     	party_1 = new Party({
-    			props: { party: /*party*/ ctx[1] },
+    			props: {
+    				party: /*party*/ ctx[1],
+    				socket: /*socket*/ ctx[5]
+    			},
     			$$inline: true
     		});
 
@@ -11799,21 +11888,21 @@ var app = (function () {
     			create_component(playerinventory.$$.fragment);
     			set_style(div0, "width", "50px");
     			set_style(div0, "height", "25px");
-    			add_location(div0, file$7, 71, 4, 2429);
+    			add_location(div0, file$7, 65, 4, 2220);
     			attr_dev(div1, "class", "grid-column");
-    			add_location(div1, file$7, 68, 2, 2373);
+    			add_location(div1, file$7, 62, 2, 2164);
     			attr_dev(div2, "class", "grid-column");
-    			add_location(div2, file$7, 79, 2, 2690);
+    			add_location(div2, file$7, 73, 2, 2497);
     			attr_dev(div3, "class", "grid-container");
-    			add_location(div3, file$7, 67, 0, 2342);
+    			add_location(div3, file$7, 61, 0, 2133);
     			attr_dev(div4, "class", "grid-column");
-    			add_location(div4, file$7, 85, 2, 2798);
+    			add_location(div4, file$7, 79, 2, 2605);
     			attr_dev(div5, "class", "grid-column");
-    			add_location(div5, file$7, 88, 2, 2882);
+    			add_location(div5, file$7, 82, 2, 2689);
     			attr_dev(div6, "class", "grid-container");
-    			add_location(div6, file$7, 84, 0, 2767);
+    			add_location(div6, file$7, 78, 0, 2574);
     			attr_dev(div7, "class", "main-container");
-    			add_location(div7, file$7, 63, 0, 2250);
+    			add_location(div7, file$7, 57, 0, 2041);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -11857,7 +11946,7 @@ var app = (function () {
     				if (if_block) {
     					if_block.p(ctx, dirty);
     				} else {
-    					if_block = create_if_block$4(ctx);
+    					if_block = create_if_block$5(ctx);
     					if_block.c();
     					if_block.m(div0, null);
     				}
@@ -11937,34 +12026,31 @@ var app = (function () {
     	let ts = 0;
 
     	/* UNUSED TEST
-                                                                            onMount(async () => {
-                                                                              const res = await axios.get(
-                                                                                "https://76xzn-3000.sse.codesandbox.io/api/player"
-                                                                              );
-                                                                              player = await res.data;
-                                                                            });
-                                                                          */
+                                                                              onMount(async () => {
+                                                                                const res = await axios.get(
+                                                                                  "https://76xzn-3000.sse.codesandbox.io/api/player"
+                                                                                );
+                                                                                player = await res.data;
+                                                                              });
+                                                                            */
     	const attack = () => {
     		ts = Date.now();
     		socket.emit("attack");
     	};
 
     	socket.on("attack return", () => {
-    		console.log(Date.now() - ts);
+    		
     	});
 
     	socket.on("player update", playerUpdated => {
-    		console.log("player update received.");
     		$$invalidate(0, player = playerUpdated);
     	});
 
     	socket.on("mobs update", mobsUpdated => {
-    		console.log("mobs update received.");
     		$$invalidate(2, mobs = mobsUpdated);
     	});
 
     	socket.on("party update", partyUpdated => {
-    		console.log("party update received.");
     		$$invalidate(1, party = partyUpdated);
     	});
 
@@ -11973,7 +12059,6 @@ var app = (function () {
     	});
 
     	socket.on("gamelog message", message => {
-    		console.log("gamelog message received: " + message);
     		$$invalidate(4, gameLog = [...gameLog, message]);
     	});
 

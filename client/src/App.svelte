@@ -20,40 +20,34 @@
   let ts = 0;
 
   /* UNUSED TEST
-                                                                          onMount(async () => {
-                                                                            const res = await axios.get(
-                                                                              "https://76xzn-3000.sse.codesandbox.io/api/player"
-                                                                            );
-                                                                            player = await res.data;
-                                                                          });
-                                                                        */
+                                                                            onMount(async () => {
+                                                                              const res = await axios.get(
+                                                                                "https://76xzn-3000.sse.codesandbox.io/api/player"
+                                                                              );
+                                                                              player = await res.data;
+                                                                            });
+                                                                          */
 
   const attack = () => {
     ts = Date.now();
     socket.emit("attack");
   };
 
-  socket.on("attack return", () => {
-    console.log(Date.now() - ts);
-  });
+  socket.on("attack return", () => {});
 
   socket.on("player update", playerUpdated => {
-    console.log("player update received.");
     player = playerUpdated;
   });
   socket.on("mobs update", mobsUpdated => {
-    console.log("mobs update received.");
     mobs = mobsUpdated;
   });
   socket.on("party update", partyUpdated => {
-    console.log("party update received.");
     party = partyUpdated;
   });
   socket.on("player attack mob", ({ playerID, mobID }) => {
     console.log("player attack mob received. playerID: " + playerID);
   });
   socket.on("gamelog message", message => {
-    console.log("gamelog message received: " + message);
     gameLog = [...gameLog, message];
   });
   socket.on("moblist update", mobListUpdated => {
@@ -75,7 +69,7 @@
     {/if}
     </div>
 
-    <Party party={party} />
+    <Party party={party} socket={socket} />
   </div>
   <div class="grid-column">
     <GameLog gameLog={gameLog} />

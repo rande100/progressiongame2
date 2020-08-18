@@ -52,13 +52,62 @@ const mobList = {
   wolf: { id: "wolf", name: "Wolf", level: 2, boss: false },
   cutpurse: { id: "cutpurse", name: "Cutpurse", level: 3, boss: false },
   bandit: { id: "bandit", name: "Bandit", level: 4, boss: false },
-  sorceror: { id: "sorceror", name: "Sorceror", level: 5, boss: false },
-  skeleton: { id: "skeleton", name: "Skeleton", level: 6, boss: false },
-  ghost: { id: "ghost", name: "Ghost", level: 7, boss: false },
-  giant: { id: "giant", name: "Giant", level: 8, boss: false },
-  golem: { id: "golem", name: "Golem", level: 9, boss: false },
-  babydragon: { id: "babydragon", name: "Baby Dragon", level: 10, boss: false },
-  golestandt: { id: "golestandt", name: "Golestandt", level: 10, boss: true }
+  spider: { id: "spider", name: "Spider", level: 5, boss: false },
+  apprenticesorceror: {
+    id: "apprenticesorceror",
+    name: "Apprentice Sorceror",
+    level: 6,
+    boss: false
+  },
+  skeleton: { id: "skeleton", name: "Skeleton", level: 7, boss: false },
+  raptor: { id: "raptor", name: "Raptor", level: 8, boss: false },
+  ghost: { id: "ghost", name: "Ghost", level: 9, boss: false },
+  giant: { id: "giant", name: "Giant", level: 10, boss: false },
+  rogueknight: {
+    id: "rogueknight",
+    name: "Rogue Knight",
+    level: 11,
+    boss: false
+  },
+  golem: { id: "golem", name: "Golem", level: 12, boss: false },
+  piratecaptain: {
+    id: "piratecaptain",
+    name: "Pirate Captain",
+    level: 13,
+    boss: false
+  },
+  babydragon: { id: "babydragon", name: "Baby Dragon", level: 14, boss: false },
+  lesserdemon: {
+    id: "lesserdemon",
+    name: "Lesser Demon",
+    level: 15,
+    boss: false
+  },
+  shriekingharpy: {
+    id: "shriekingharpy",
+    name: "Shrieking Harpy",
+    level: 16,
+    boss: false
+  },
+  minotaur: {
+    id: "minotaur",
+    name: "Minotaur",
+    level: 17,
+    boss: false
+  },
+  troglodyte: {
+    id: "troglodyte",
+    name: "Troglodyte",
+    level: 18,
+    boss: false
+  },
+  darkelf: {
+    id: "darkelf",
+    name: "Dark Elf",
+    level: 19,
+    boss: false
+  },
+  golestandt: { id: "golestandt", name: "Golestandt", level: 20, boss: true }
 };
 
 class PlayerCharacter {
@@ -176,6 +225,7 @@ io.on("connection", (socket) => {
   syncMobs(mobs);
   syncPlayer(players[socket.id]);
   socket.emit("moblist update", mobList);
+  socket.emit("autospawn update", autospawn);
 
   console.log("Players connected: " + Object.keys(party).length);
 
@@ -209,6 +259,13 @@ io.on("connection", (socket) => {
     players[socket.id]["name"] = name;
     syncParty(party, players);
     syncPlayer(players[socket.id]);
+  });
+
+  socket.on("player resurrect", () => {
+    playerResurrect(players[socket.id]);
+
+    syncPlayer(players[socket.id]);
+    syncParty(party, players);
   });
 
   socket.on("disconnect", () => {
@@ -251,8 +308,13 @@ const spawnMob = (mob) => {
 
 const playerAttackMob = (player, mob) => {
   if (mob.health === 0) {
-    console.log("Mob already dead.");
-    return;
+    console.log("Player attempted attack but mob is dead.");
+    return false;
+  }
+
+  if (player.health === 0) {
+    console.log("Player attempted attack but player is dead.");
+    return false;
   }
 
   let damage = player.totalStats.strength + player.totalStats.damage;
@@ -313,14 +375,16 @@ const mobAttackPlayer = (mob, player) => {
 
   player.health -= finalDamage;
 
-  if (player.health <= 0) {
-    player.health = 0;
-  }
-
   io.emit(
     "gamelog message",
     `${mob.name} attacks ${player.name} for ${finalDamage} damage.`
   );
+
+  if (player.health <= 0) {
+    player.health = 0;
+
+    io.emit("gamelog message", `${player.name} dies.`);
+  }
 
   syncParty(party, players);
 };
@@ -512,6 +576,19 @@ const updatePlayerStats = (player) => {
   }
 
   return player;
+};
+
+const playerResurrect = (player) => {
+  if (player.health !== 0) return false;
+
+  // lose xp
+  player.xp -= 10;
+  if (player.xp < 0) player.xp = 0;
+
+  // reset health
+  player.health = player.maxHealth;
+
+  io.emit("gamelog message", `${player.name} resurrects.`);
 };
 
 const mobsAutoAttack = () => {

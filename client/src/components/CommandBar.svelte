@@ -41,7 +41,7 @@
   {:else}
     <button type="button" id="flee" on:click={flee}>Flee</button>
   {/if}
-  <label><input type="checkbox" name="autospawn" checked={autospawn} on:change={autospawnChange}>
+  <label style="display: inline; margin-left: 1em;"><input type="checkbox" name="autospawn" checked={autospawn} on:change={autospawnChange}>
     Automatically re-engage when mob dies
   </label>
 </div>
