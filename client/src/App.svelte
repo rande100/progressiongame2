@@ -17,20 +17,16 @@
   let mobs = {};
   let mobList = {};
   let gameLog = [];
+  let isAutoattack = true;
   let ts = 0;
-
-  /* UNUSED TEST
-                                                                            onMount(async () => {
-                                                                              const res = await axios.get(
-                                                                                "https://76xzn-3000.sse.codesandbox.io/api/player"
-                                                                              );
-                                                                              player = await res.data;
-                                                                            });
-                                                                          */
 
   const attack = () => {
     ts = Date.now();
     socket.emit("attack");
+  };
+
+  const autoattackChange = () => {
+    isAutoattack = !isAutoattack;
   };
 
   socket.on("attack return", () => {});
@@ -53,6 +49,20 @@
   socket.on("moblist update", mobListUpdated => {
     mobList = mobListUpdated;
   });
+
+  const autoattack = () => {
+    if (
+      isAutoattack &&
+      mobs["a"] &&
+      mobs["a"].health > 0 &&
+      party[socket.id] &&
+      party[socket.id].health > 0
+    ) {
+      socket.emit("attack");
+    }
+  };
+
+  setInterval(autoattack, 2000);
 </script>
 
 <div class="main-container">
@@ -64,9 +74,14 @@
     <Mobs mobs={mobs} />
 
     <div style="width: 50px; height: 25px;">
-    {#if mobs && mobs["a"] && mobs["a"].health > 0 && player && player.health > 0}
-      <button type="button" name="attack" on:click={attack}>Attack</button>
+    {#if mobs && mobs["a"] && mobs["a"].health > 0 && party[socket.id] && party[socket.id].health > 0}
+      <!--<button type="button" name="attack" on:click={attack}>Attack</button>-->
     {/if}
+    </div>
+    <div style="margin-top: 5px;">
+      <label style="display: inline;"><input type="checkbox" name="autoattack" checked={isAutoattack} on:change={autoattackChange}>
+        Auto-Attack
+      </label>
     </div>
 
     <Party party={party} socket={socket} />

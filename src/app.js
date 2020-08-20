@@ -152,9 +152,9 @@ class Player {
     };
 
     this.baseStats = {
-      strength: 1,
-      agility: 1,
-      intelligence: 1,
+      strength: 2,
+      agility: 2,
+      intelligence: 2,
       unspent: 0,
       damage: 0,
       armor: 0
@@ -169,11 +169,16 @@ class Player {
     };
 
     this.totalStats = {
-      strength: 1,
-      agility: 1,
-      intelligence: 1,
+      strength: 2,
+      agility: 2,
+      intelligence: 2,
       damage: 0,
       armor: 0
+    };
+
+    // stores the last time a skill was used
+    this.cooldowns = {
+      attack: 0
     };
   }
 }
@@ -259,6 +264,13 @@ io.on("connection", (socket) => {
     players[socket.id]["name"] = name;
     syncParty(party, players);
     syncPlayer(players[socket.id]);
+  });
+
+  socket.on("player heal player", (targetPlayerID) => {
+    playerHealPlayer(players[socket.id], players[targetPlayerID]);
+
+    syncPlayer(players[targetPlayerID]);
+    syncParty(party, players);
   });
 
   socket.on("player resurrect", () => {
@@ -390,10 +402,24 @@ const mobAttackPlayer = (mob, player) => {
 };
 
 const grantXPFromMob = (mob, party) => {
+  // base xp granted per mob
   let xp = 2;
 
   for (const id in party) {
+    // player gets less xp if they're 3+ levels higher than mob
+    if (players[id]["level"] >= mob.level + 3) xp = 1;
+
+    // player gets no xp if they're 6+ levels higher than mob
+    if (players[id]["level"] >= mob.level + 6) xp = 0;
+
     players[id]["xp"] += xp;
+
+    // also gain mana
+    let manaGain = 1;
+    players[id]["mana"] += manaGain;
+    if (players[id]["mana"] > players[id]["maxMana"]) {
+      players[id]["mana"] = players[id]["maxMana"];
+    }
 
     io.to(id).emit("gamelog message", `You receive ${xp} experience.`);
 
@@ -491,7 +517,9 @@ const syncParty = (party, players) => {
       name: players[id]["name"],
       level: players[id]["level"],
       health: players[id]["health"],
-      maxHealth: players[id]["maxHealth"]
+      maxHealth: players[id]["maxHealth"],
+      mana: players[id]["mana"],
+      maxMana: players[id]["maxMana"]
     };
   }
   io.emit("party update", party);
@@ -576,6 +604,29 @@ const updatePlayerStats = (player) => {
   }
 
   return player;
+};
+
+const playerHealPlayer = (sourcePlayer, targetPlayer) => {
+  if (sourcePlayer.health === 0) return false;
+  if (targetPlayer.health === targetPlayer.maxHealth) return false;
+
+  // source pays resource
+  let manaCost = 5;
+  if (sourcePlayer.mana < manaCost) return false;
+  sourcePlayer.mana -= manaCost;
+
+  // target gets healed
+  let healAmount = sourcePlayer.level + sourcePlayer.totalStats.intelligence;
+  targetPlayer.health += healAmount;
+
+  if (targetPlayer.health > targetPlayer.maxHealth) {
+    targetPlayer.health = targetPlayer.maxHealth;
+  }
+
+  io.emit(
+    "gamelog message",
+    `${sourcePlayer.name} heals ${targetPlayer.name} for ${healAmount} health.`
+  );
 };
 
 const playerResurrect = (player) => {
